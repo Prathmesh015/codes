@@ -1,0 +1,17 @@
+trigger StudentRecordTrigger on Student__c (before insert, before update) {
+    
+    for(Student__c s : Trigger.new) {
+        
+        if(s.Age__c <= 18) {
+            s.addError('Age must be above 18');
+        }
+        
+        if(s.Marks__c < 0) {
+            s.Marks__c = 0;
+        }
+        
+        if(s.Email__c == null || !s.Email__c.contains('@')) {
+            s.addError('Invalid Email');
+        }
+    }
+}

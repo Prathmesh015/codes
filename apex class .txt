@@ -1,0 +1,71 @@
+public class StudentRecordManager {
+    
+    // CREATE
+    public static void addStudent(String name, String email, Integer age, Integer roll, Integer marks, String dept) {
+        
+        Student__c s = new Student__c();
+        s.Name = name;
+        s.Email__c = email;
+        s.Age__c = age;
+        s.Roll_No__c = roll;
+        s.Marks__c = marks;
+        s.Department__c = dept;
+        
+        insert s;
+    }
+    
+    
+    // READ
+    public static List<Student__c> getStudents() {
+        return [SELECT Id, Name, Email__c, Age__c, Roll_No__c, Marks__c, Department__c FROM Student__c];
+    }
+    
+    
+    // UPDATE
+    public static void updateStudent(Id studentId, String name, String email, Integer age, Integer roll, Integer marks, String dept) {
+        
+        Student__c s = [SELECT Id, Name, Email__c, Age__c, Roll_No__c, Marks__c, Department__c 
+                        FROM Student__c 
+                        WHERE Id = :studentId LIMIT 1];
+        
+        s.Name = name;
+        s.Email__c = email;
+        s.Age__c = age;
+        s.Roll_No__c = roll;
+        s.Marks__c = marks;
+        s.Department__c = dept;
+        
+        update s;
+    }
+    
+    
+    // DELETE
+    public static void deleteStudent(Id studentId) {
+        
+        Student__c s = [SELECT Id FROM Student__c WHERE Id = :studentId LIMIT 1];
+        delete s;
+    }
+}
+
+
+
+
+
+
+execute ---
+
+
+1. CREATE (Insert Student)
+StudentRecordManager.addStudent('Prathmesh', 'test@gmail.com', 20, 101, 85, 'IT');
+
+2. READ (Fetch Students)
+List<Student__c> students = StudentRecordManager.getStudents();
+System.debug(students);
+
+3. UPDATE (Modify Student)
+Id studentId = 'YOUR_RECORD_ID';
+StudentRecordManager.updateStudent(studentId, 'Prathmesh Updated', 'new@gmail.com', 21, 101, 90, 'Computer');
+
+4. DELETE (Remove Student)
+Id studentId = 'YOUR_RECORD_ID';
+StudentRecordManager.deleteStudent(studentId);
