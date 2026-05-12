@@ -1,0 +1,35 @@
+import pandas as pd
+import numpy as np
+
+# Load dataset
+df = pd.read_csv("C:\\Users\\ll010\\OneDrive\\Desktop\\Titanic-Dataset.csv")
+
+# Display first 5 rows
+print(df.head())
+
+# Check missing values
+print(df.isnull().sum())
+
+# Statistical summary
+print(df.describe())
+
+# Dataset information
+print(df.info())
+
+# Dimensions of dataset
+print(df.shape)
+
+# Variable data types
+print(df.dtypes)
+
+# Convert datatype
+df['Age'] = df['Age'].astype('float')
+
+# Normalize Fare column
+df['Fare'] = (df['Fare'] - df['Fare'].min()) / (df['Fare'].max() - df['Fare'].min())
+
+# Convert categorical variable into numerical
+df['Sex'] = df['Sex'].map({'male':0, 'female':1})
+
+# Display updated dataset
+print(df.head())

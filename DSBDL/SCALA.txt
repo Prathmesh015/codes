@@ -1,0 +1,75 @@
+🔹 Steps to Run Scala Program in Apache Spark
+1. Install Required Software
+
+You need:
+
+Java JDK
+Scala
+Apache Spark
+🔹 Step 2: Create Input File
+
+Create a file named:
+
+input.txt
+
+Add some text inside:
+
+hello spark
+hello scala
+hello world
+
+step 3:
+
+//Scala program
+import org.apache.spark.sql.SparkSession
+
+object WordCountExample {
+
+  def main(args: Array[String]): Unit = {
+
+    // Create Spark Session
+    val spark = SparkSession.builder()
+      .appName("Word Count Example")
+      .master("local[*]")
+      .getOrCreate()
+
+    // Read text file
+    val textFile = spark.read.textFile("input.txt")
+
+    // Split words and count frequency
+    val wordCounts = textFile
+      .flatMap(line => line.split(" "))
+      .groupBy("value")
+      .count()
+
+    // Display result
+    wordCounts.show()
+
+    // Stop Spark
+    spark.stop()
+  }
+}
+
+//step 4:
+Run Scala File Using spark-submit
+Step 1: Compile Program
+
+Compile Scala code:
+
+scalac WordCountExample.scala
+
+This creates class files.
+
+Step 2: Create JAR File
+jar cf WordCountExample.jar *.class
+Step 3: Run Program
+spark-submit --class WordCountExample WordCountExample.jar
+🔹 Expected Output
++------+-----+
+| value|count|
++------+-----+
+| hello|    3|
+| spark|    1|
+| scala|    1|
+| world|    1|
++------+-----+

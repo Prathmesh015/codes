@@ -1,0 +1,63 @@
+import java.io.*;
+import java.util.*;
+
+public class WeatherAnalysis {
+
+    public static void main(String[] args) {
+
+        double tempSum = 0;
+        double dewSum = 0;
+        double windSum = 0;
+        int count = 0;
+
+        try {
+
+            // Open the file
+            File file = new File("sample_weather.txt");
+
+            // Read the file
+            Scanner sc = new Scanner(file);
+
+            // Skip header line
+            sc.nextLine();
+
+            // Read each line
+            while (sc.hasNextLine()) {
+
+                String line = sc.nextLine();
+
+                // Split line into parts
+                String[] data = line.split(" ");
+
+                // Extract values
+                double temperature = Double.parseDouble(data[1]);
+                double dewPoint = Double.parseDouble(data[2]);
+                double windSpeed = Double.parseDouble(data[3]);
+
+                // Add to sums
+                tempSum += temperature;
+                dewSum += dewPoint;
+                windSum += windSpeed;
+
+                // Increase count
+                count++;
+            }
+
+            // Calculate averages
+            double avgTemp = tempSum / count;
+            double avgDew = dewSum / count;
+            double avgWind = windSum / count;
+
+            // Display results
+            System.out.println("===== Weather Data Analysis =====");
+            System.out.println("Average Temperature : " + avgTemp);
+            System.out.println("Average Dew Point   : " + avgDew);
+            System.out.println("Average Wind Speed  : " + avgWind);
+
+            sc.close();
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
+    }
+}

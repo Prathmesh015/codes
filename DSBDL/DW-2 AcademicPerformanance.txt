@@ -1,0 +1,83 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Create dataset
+data = {
+    'StudentID': [1,2,3,4,5,6,7,8,9,10],
+    'Name': ['Alice','Bob','Charlie','David','Eva','Frank','Grace','Hannah','Ian','Jane'],
+    'Age': [15,16,15,16,15,np.nan,17,16,100,15],   # 100 is outlier, NaN is missing
+    'Gender': ['F','M','M','M','F','M','F','F','M','F'],
+    'MathScore': [85,90,78,92,88,75,95,89,200,85],   # 200 is outlier
+    'EnglishScore': [78,85,np.nan,80,82,77,90,84,70,88],   # missing value
+    'ScienceScore': [92,88,85,95,90,78,93,87,89,np.nan]    # missing value
+}
+
+# Convert into DataFrame
+df = pd.DataFrame(data)
+
+# Display original data
+print("Original Data:")
+print(df)
+
+# Check missing values
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+# Fill missing values with mean
+df['Age'].fillna(df['Age'].mean(), inplace=True)
+df['EnglishScore'].fillna(df['EnglishScore'].mean(), inplace=True)
+df['ScienceScore'].fillna(df['ScienceScore'].mean(), inplace=True)
+
+# Handle invalid age values (Age should be between 10 and 20)
+df['Age'] = df['Age'].apply(lambda x: np.nan if x < 10 or x > 20 else x)
+df['Age'].fillna(df['Age'].mean(), inplace=True)
+
+# Detect outliers using IQR
+numeric_cols = ['MathScore', 'EnglishScore', 'ScienceScore', 'Age']
+
+for col in numeric_cols:
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+    IQR = Q3 - Q1
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+
+    outliers = df[(df[col] < lower) | (df[col] > upper)]
+    print(f"\nOutliers in {col}:")
+    print(outliers[[col]])
+
+# Cap outliers
+for col in numeric_cols:
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+    IQR = Q3 - Q1
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+
+    df[col] = np.where(df[col] > upper, upper, df[col])
+    df[col] = np.where(df[col] < lower, lower, df[col])
+
+# Check skewness before transformation
+print("\nSkewness before transformation:", df['MathScore'].skew())
+
+# Apply log transformation
+df['MathScore_log'] = np.log(df['MathScore'])
+
+# Check skewness after transformation
+print("Skewness after log transformation:", df['MathScore_log'].skew())
+
+# Plot before transformation
+sns.histplot(df['MathScore'], kde=True)
+plt.title("Math Score Distribution Before Transformation")
+plt.show()
+
+# Plot after transformation
+sns.histplot(df['MathScore_log'], kde=True)
+plt.title("Math Score Distribution After Log Transformation")
+plt.show()
+
+# Final cleaned dataset
+print("\nFinal Cleaned Data:")
+print(df)

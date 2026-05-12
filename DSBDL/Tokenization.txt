@@ -1,0 +1,78 @@
+import nltk
+
+from nltk.tokenize import word_tokenize
+
+from nltk.corpus import stopwords
+
+from nltk.stem import PorterStemmer
+
+from nltk.stem import WordNetLemmatizer
+
+from nltk import pos_tag
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+nltk.download('punkt')
+
+nltk.download('punkt_tab')
+
+nltk.download('stopwords')
+
+nltk.download('averaged_perceptron_tagger_eng')
+
+nltk.download('wordnet')
+
+text = "Natural Language Processing is an important field of Artificial Intelligence. It helps computers understand human language."
+
+tokens = word_tokenize(text)
+
+print("Tokens:\n")
+
+print(tokens)
+
+pos = pos_tag(tokens)
+
+print("\nPOS Tags:\n")
+
+print(pos)
+
+stop_words = set(stopwords.words('english'))
+
+filtered = [word for word in tokens if word.lower() not in stop_words]
+
+print("\nAfter Stop Words Removal:\n")
+
+print(filtered)
+
+ps = PorterStemmer()
+
+stemmed = [ps.stem(word) for word in filtered]
+
+print("\nStemmed Words:\n")
+
+print(stemmed)
+
+lemmatizer = WordNetLemmatizer()
+
+lemmatized = [lemmatizer.lemmatize(word) for word in filtered]
+
+print("\nLemmatized Words:\n")
+print(lemmatized)
+
+documents = [
+    "Natural language processing is important",
+    "Artificial intelligence uses natural language",
+    "Computers understand human language"
+]
+
+vectorizer = TfidfVectorizer()
+
+X = vectorizer.fit_transform(documents)
+
+print("\nTF-IDF Matrix:\n")
+
+print(X.toarray())
+
+print("\nFeature Names:\n")
+
+print(vectorizer.get_feature_names_out())

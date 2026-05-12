@@ -1,0 +1,68 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+
+from sklearn.naive_bayes import GaussianNB
+
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+
+df = pd.read_csv("C:\\Users\\ll010\\OneDrive\\Desktop\\iris_dataset.csv")
+
+print(df.head())
+
+X = df.iloc[:, 0:4]
+
+y = df['target']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=0
+)
+
+model = GaussianNB()
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("\nPredicted Values:\n")
+
+print(y_pred)
+
+cm = confusion_matrix(y_test, y_pred)
+
+print("\nConfusion Matrix:\n")
+
+print(cm)
+
+TP = cm[0][0]
+FP = cm[0][1]
+FN = cm[1][0]
+TN = cm[1][1]
+
+print("\nTrue Positive:", TP)
+
+print("False Positive:", FP)
+
+print("False Negative:", FN)
+
+print("True Negative:", TN)
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("\nAccuracy:", accuracy)
+
+error_rate = 1 - accuracy
+
+print("Error Rate:", error_rate)
+
+precision = precision_score(y_test, y_pred, average='macro')
+
+print("Precision:", precision)
+
+recall = recall_score(y_test, y_pred, average='macro')
+
+print("Recall:", recall)

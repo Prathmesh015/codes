@@ -1,0 +1,67 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load Titanic dataset
+titanic = sns.load_dataset('titanic')
+
+# Create box plot
+plt.figure(figsize=(8,6))
+
+sns.boxplot(x='sex', y='age', hue='survived', data=titanic)
+
+# Title and labels
+plt.title("Age Distribution by Gender and Survival")
+plt.xlabel("Gender")
+plt.ylabel("Age")
+
+# Show graph
+plt.show()
+
+
+
+
+# Understanding the Plot
+
+# X-axis -> Gender (sex)
+# Y-axis -> Age (age)
+
+# Hue -> Survival
+# survived = 0 -> Not Survived
+# survived = 1 -> Survived
+
+# Each box shows:
+# 1. Median (middle line)
+# 2. Quartiles (box edges)
+# 3. Outliers (dots)
+
+
+# 2. Observations / Inference
+
+# Gender vs Survival
+# Females had a much higher survival rate
+# Many female survivors fall in a wide age range
+
+# Age Factor
+# Younger passengers (children) had higher chances of survival
+# Older passengers show lower survival probability
+
+# Male Passengers
+# Most males did not survive, especially adults
+# Surviving males are mostly younger (children)
+
+# Spread of Age
+# Female age distribution is more spread out
+# Male distribution shows more concentration in middle ages
+
+# Outliers
+# Some very old passengers survived, but they are rare
+# Some very young passengers did not survive,
+# indicating survival was not guaranteed
+
+
+# Conclusion
+
+# Survival on the Titanic strongly depended on gender and age
+# Priority was likely given to women and children
+# Box plot clearly highlights differences
+# in age distribution and survival trends

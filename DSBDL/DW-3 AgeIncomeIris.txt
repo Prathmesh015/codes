@@ -1,0 +1,54 @@
+import pandas as pd
+import numpy as np
+
+# Example data
+data = {
+    'AgeGroup': ['Young', 'Young', 'Middle', 'Middle', 'Old', 'Old', 'Young', 'Middle', 'Old'],
+    'Income': [25000, 27000, 40000, 42000, 55000, 60000, 26000, 41000, 58000]
+}
+
+df = pd.DataFrame(data)
+
+print("Original Data:")
+print(df)
+
+# Statistical summary for each age group
+grouped = df.groupby('AgeGroup')['Income'].agg(['mean', 'median', 'min', 'max', 'std'])
+
+print("\nStatistical Summary by Age Group:")
+print(grouped)
+
+# Dictionary: AgeGroup → list of incomes
+income_list = df.groupby('AgeGroup')['Income'].apply(list).to_dict()
+
+print("\nAgeGroup → List of Incomes:")
+print(income_list)
+
+
+# Load iris dataset
+url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv"
+iris = pd.read_csv(url)
+
+print("\nFirst 5 rows of Iris Dataset:")
+print(iris.head())
+
+# Separate by species
+setosa = iris[iris['species'] == 'setosa']
+versicolor = iris[iris['species'] == 'versicolor']
+virginica = iris[iris['species'] == 'virginica']
+
+# Display statistical details
+print("\nSetosa Stats:")
+print(setosa.describe())
+
+print("\nVersicolor Stats:")
+print(versicolor.describe())
+
+print("\nVirginica Stats:")
+print(virginica.describe())
+
+# Convert setosa numeric values into list format
+setosa_list = setosa.iloc[:, :-1].values.tolist()
+
+print("\nFirst 5 rows of Setosa as List:")
+print(setosa_list[:5])

@@ -1,0 +1,78 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+
+# Creating dataset directly
+data = {
+    'Age': [19, 35, 26, 27, 19, 27, 32, 25, 35, 26,
+            30, 45, 40, 50, 23, 31, 48, 29, 36, 42],
+
+    'EstimatedSalary': [19000, 20000, 43000, 57000, 76000,
+                        58000, 150000, 33000, 65000, 80000,
+                        120000, 22000, 75000, 90000, 25000,
+                        68000, 140000, 43000, 87000, 60000],
+
+    'Purchased': [0, 0, 0, 0, 0,
+                  0, 1, 0, 1, 0,
+                  1, 0, 1, 1, 0,
+                  1, 1, 0, 1, 1]
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+
+# Display first 5 rows
+print(df.head())
+
+# Input and Output
+X = df[['Age', 'EstimatedSalary']]
+y = df['Purchased']
+
+# Split dataset into training and testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=0
+)
+
+# Feature Scaling
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+# Logistic Regression Model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+print("Predicted Values:", y_pred)
+
+# Confusion Matrix
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:\n", cm)
+
+# Extract values
+TN, FP, FN, TP = cm.ravel()
+
+print("TP:", TP)
+print("TN:", TN)
+print("FP:", FP)
+print("FN:", FN)
+
+# Accuracy
+accuracy = (TP + TN) / (TP + TN + FP + FN)
+print("Accuracy:", accuracy)
+
+# Error Rate
+error_rate = 1 - accuracy
+print("Error Rate:", error_rate)
+
+# Precision
+precision = TP / (TP + FP)
+print("Precision:", precision)
+
+# Recall
+recall = TP / (TP + FN)
+print("Recall:", recall)

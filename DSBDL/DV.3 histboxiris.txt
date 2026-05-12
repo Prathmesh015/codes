@@ -1,0 +1,67 @@
+# Import libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load inbuilt iris dataset from seaborn
+df = sns.load_dataset('iris')
+
+# Display first 5 rows
+print("First 5 Rows:\n")
+print(df.head())
+
+# Dataset information
+print("\nDataset Information:\n")
+print(df.info())
+
+# Statistical summary
+print("\nStatistical Summary:\n")
+print(df.describe())
+
+# ------------------------------------------------
+# 1. Features and Their Types
+# ------------------------------------------------
+
+print("\nFeatures and Data Types:\n")
+print(df.dtypes)
+
+# ------------------------------------------------
+# 2. Histogram for each feature
+# ------------------------------------------------
+
+df.hist(figsize=(10,8))
+plt.suptitle("Histogram of Iris Dataset Features")
+plt.show()
+
+# ------------------------------------------------
+# 3. Boxplot for each feature
+# ------------------------------------------------
+
+numeric_columns = df.select_dtypes(include='float64').columns
+
+for column in numeric_columns:
+    plt.figure(figsize=(5,4))
+    plt.boxplot(df[column])
+    plt.title(f"Boxplot of {column}")
+    plt.ylabel(column)
+    plt.show()
+
+# ------------------------------------------------
+# 4. Compare distributions and identify outliers
+# ------------------------------------------------
+
+for column in numeric_columns:
+
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+
+    IQR = Q3 - Q1
+
+    lower_limit = Q1 - 1.5 * IQR
+    upper_limit = Q3 + 1.5 * IQR
+
+    outliers = df[(df[column] < lower_limit) |
+                  (df[column] > upper_limit)]
+
+    print(f"\nOutliers in {column}:")
+    print(outliers[[column]])
